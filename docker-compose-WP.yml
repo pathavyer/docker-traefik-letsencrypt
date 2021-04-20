@@ -10,10 +10,10 @@ services:
       - default
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: Br1sklyD1g1t4l@2021
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PSWD
       MYSQL_DATABASE: db
-      MYSQL_USER: briskly
-      MYSQL_PASSWORD: mybriskly@2021
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PSWD
 
   wordpress:
     depends_on:
@@ -23,8 +23,8 @@ services:
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: db
-      WORDPRESS_DB_USER: briskly
-      WORDPRESS_DB_PASSWORD: mybriskly@2021
+      WORDPRESS_DB_USER: $MYSQL_USER
+      WORDPRESS_DB_PASSWORD: $MYSQL_PSWD
     volumes:
       - ./wp-data:/var/www/html
     networks:
