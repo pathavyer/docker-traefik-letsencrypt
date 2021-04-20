@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+  db:
+    image: mariadb
+    container_name: wp-db
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - default
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Br1sklyD1g1t4l@2021
+      MYSQL_DATABASE: db
+      MYSQL_USER: briskly
+      MYSQL_PASSWORD: mybriskly@2021
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    container_name: wordpress
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: db
+      WORDPRESS_DB_USER: briskly
+      WORDPRESS_DB_PASSWORD: mybriskly@2021
+    volumes:
+      - ./wp-data:/var/www/html
+    networks:
+      - proxy
+      - default
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.wordpress-secure.entrypoints=websecure"
+      - "traefik.http.routers.wordpress-secure.rule=Host(`briskly.ca`)"
+      # - "traefik.http.routers.wordpress-secure.service=wordpress-service"
+      # - "traefik.http.services.wordpress-service.loadbalancer.server.port=80"
+
+volumes:
+  db-data:
+    name: wp-db-data
+networks:
+  proxy:
+    external: true
+
+
+
